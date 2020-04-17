@@ -3,12 +3,12 @@
 getting started in scala and building small scripts. 
 
 ![sc1](https://github.com/davidvela/Scala_scripts/blob/master/assets/logo.jpg)
-Logo:
-EPFL computer since building 
+<br/>
+Logo: EPFL computer since building 
 École polytechnique fédérale de Lausanne
 
 ## variables / types / operations 
-val / var xxx : Int, String, Array ... 
+val / var xxx : Int, String, Array ... <br/>
 val = Immutable  / Var = Mutable 
 
 
