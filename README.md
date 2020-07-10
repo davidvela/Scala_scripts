@@ -1,6 +1,6 @@
 # Scala scripts 
 
-getting started in scala and building small scripts. 
+getting started in scala and building small scripts... 
 
 ![sc1](https://github.com/davidvela/Scala_scripts/blob/master/assets/logo.jpg)
 <br/>
