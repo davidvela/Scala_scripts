@@ -85,15 +85,37 @@ def convertTSV_PARQUET(): String = {
 /* *********** PARSE TSV to Parquet with JSON SCHEMA ********************* */ 
 def convertTSV_PARQUET_withSchema(): String = {
     // read json: 
-    val countDF = spark.read.json(s"$containerPath/$l_jc")
-
+    // val countDF = spark.read.json(s"$containerPath/$l_jc")
     var schema = new StructType()
-
     // schema = schema.add("col_name", StringType,true)
     // schema.add("", StringType,true)
 
-							
-    val df   = spark.read.format("com.databricks.spark.csv")
+  def complex_logic(){
+    // var fields = countDF.select("FIELDS")
+    // var jsonStr = ""
+    // fields.collect().foreach(row => jsonStr = s"$row")
+    //var fields_ds  = spark.read.json(Seq(jsonStr).toDS)
+  }
+  var jsonStr = ""
+  jsonStr = """[{"N":"col1","L":"Col.1","T":"C"},{"N":"Col2","L":"Col2","T":"N"},{"N":"col3","L":"c3","T":"D"},{"N":"c4","L":"c4","T":"P"}]}]"""
+  val fields_ds  = spark.read.json(Seq(jsonStr).toDS)
+  // val fields_ds  = spark.read.json(s"$containerPath/$l_jc")
+  // display(fields_ds)
+ 
+  fields_ds.collect().foreach(row =>{ 
+        print(row.get(1));println(row.get(2))
+        row.get(2) match {  
+          case "C"   => schema = schema.add(row.get(1).toString, StringType,true) ;// CHAR
+          case "N"   => schema = schema.add(row.get(1).toString, IntegerType,true); // NUMC - Numeric Char
+          case "I"   => schema = schema.add(row.get(1).toString, IntegerType,true); // CHAR
+          case "P"   => schema = schema.add(row.get(1).toString, DoubleType,true); // P
+          case "D"   => schema = schema.add(row.get(1).toString, org.apache.spark.sql.types.DateType ,true); // Dats
+          case whoa  => schema = schema.add(row.get(1).toString, StringType,true)
+        }                             
+  })
+  print(schema)
+
+  val df   = spark.read.format("com.databricks.spark.csv")
                   .option("header", "true")
                 //.option("inferSchema", "true")
                 .schema(schema)
