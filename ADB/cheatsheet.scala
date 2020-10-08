@@ -56,3 +56,32 @@ def DataFrames(){
 }
 
 
+def DataFrameWithSchema(){
+    // https://docs.databricks.com/_static/notebooks/read-csv-schema.html
+    import org.apache.spark.sql.types._
+
+    val schema = new StructType()
+    .add("_c0",IntegerType,true)
+    .add("carat",DoubleType,true)
+    .add("cut",StringType,true)
+    .add("color",StringType,true)
+    .add("clarity",StringType,true)
+    .add("depth",DoubleType,true)
+    .add("table",DoubleType,true)
+    .add("price",IntegerType,true)
+    .add("x",DoubleType,true)
+    .add("y",DoubleType,true)
+    .add("z",DoubleType,true)
+
+    val diamonds_with_schema = spark.read.format("csv")
+    .option("header", "true")
+    .schema(schema)
+    .load("/databricks-datasets/Rdatasets/data-001/csv/ggplot2/diamonds.csv")
+
+    diamonds_with_schema.printSchema
+
+    display(diamonds_with_schema)
+
+
+}
+
