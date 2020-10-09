@@ -85,3 +85,26 @@ def DataFrameWithSchema(){
 
 }
 
+def parseWrappedArrays():String{
+    import org.apache.spark.sql.Row
+    import org.apache.spark.sql.functions._
+    import scala.collection.mutable.WrappedArray
+
+    val data = Seq((Seq(1,2,3),Seq(4,5,6),Seq(7,8,9)))
+    val df = sqlContext.createDataFrame(data)
+    val first = df.first
+
+    // use a pattern match to deferral the type
+    val mapped = first.getAs[WrappedArray[Int]](0)
+
+    // now we can use it like normal collection
+    mapped.mkString("\n")
+
+    // get rows where has array
+    val rows = df.collect.map {
+        case Row(a: Seq[Any], b: Seq[Any], c: Seq[Any]) => 
+            (a, b, c)
+    }
+    rows.mkString("\n")
+    "|""
+}
